@@ -35,20 +35,20 @@ onUnmounted(() => {
 </script>
 
 <template>
-  <BaseCard
-    :columns="columns"
-    :rows="tickers"
-    row-key="symbol"
-    :selected-key="selectedSymbol"
-    @row-click="(row) => store.selectSymbol(row.symbol)"
-  >
+  <BaseCard title="Harga Pasar">
     <p v-if="loading" class="text-sm text-gray-400">Memuat data...</p>
     <p v-else-if="error" class="text-sm text-red-400">{{ error }}</p>
     <template v-else>
       <p class="mb-3 text-xs" :class="connected ? 'text-green-400' : 'text-gray-500'">
         {{ connected ? '● Live' : '○ Terputus, mencoba menyambung ulang...' }}
       </p>
-      <BaseTable :columns="columns" :rows="tickers" row-key="symbol">
+      <BaseTable
+        :columns="columns"
+        :rows="tickers"
+        row-key="symbol"
+        :selected-key="selectedSymbol"
+        @row-click="(row) => store.selectSymbol(row.symbol)"
+      >
         <template #cell-price="{ value }">{{ formatPrice(Number(value)) }}</template>
         <template #cell-change24h="{ value }"><PriceBadge :value="Number(value)" /></template>
         <template #cell-volume24h="{ value }">
