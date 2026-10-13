@@ -8,7 +8,7 @@ import PriceBadge from '@/components/ui/PriceBadge.vue'
 import type { Column } from '@/types/table'
 
 const store = useMarketStore()
-const { tickers, loading, error, connected } = storeToRefs(store)
+const { tickers, loading, error, connected, selectedSymbol } = storeToRefs(store)
 
 const columns: Column[] = [
   { key: 'symbol', label: 'Pair' },
@@ -21,16 +21,27 @@ function formatPrice(value: number): string {
   return value.toLocaleString('en-US', { style: 'currency', currency: 'USD' })
 }
 
+let active = true
+
 onMounted(async () => {
   await store.fetchTickers()
-  if (!store.error) store.startStream()
+  if (active && !store.error) store.startStream()
 })
 
-onUnmounted(() => store.stopStream())
+onUnmounted(() => {
+  active = false
+  store.stopStream()
+})
 </script>
 
 <template>
-  <BaseCard title="Harga Pasar">
+  <BaseCard
+    :columns="columns"
+    :rows="tickers"
+    row-key="symbol"
+    :selected-key="selectedSymbol"
+    @row-click="(row) => store.selectSymbol(row.symbol)"
+  >
     <p v-if="loading" class="text-sm text-gray-400">Memuat data...</p>
     <p v-else-if="error" class="text-sm text-red-400">{{ error }}</p>
     <template v-else>

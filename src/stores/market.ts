@@ -9,6 +9,7 @@ export const useMarketStore = defineStore('market', () => {
   const loading = ref(false)
   const error = ref<string | null>(null)
   const connected = ref(false)
+  const selectedSymbol = ref('BTCUSDT')
 
   let disconnect: (() => void) | null = null
 
@@ -33,6 +34,10 @@ export const useMarketStore = defineStore('market', () => {
     }
   }
 
+  function selectSymbol(symbol: string) {
+    selectedSymbol.value = symbol
+  }
+
   function startStream() {
     if (disconnect) return
     disconnect = connectTickerStream(WATCHLIST, {
@@ -49,5 +54,15 @@ export const useMarketStore = defineStore('market', () => {
     connected.value = false
   }
 
-  return { tickers, loading, error, connected, fetchTickers, startStream, stopStream }
+  return {
+    tickers,
+    loading,
+    error,
+    connected,
+    selectedSymbol,
+    fetchTickers,
+    selectSymbol,
+    startStream,
+    stopStream,
+  }
 })

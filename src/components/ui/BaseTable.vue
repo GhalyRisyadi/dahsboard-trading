@@ -5,6 +5,12 @@ defineProps<{
   columns: Column[]
   rows: T[]
   rowKey: keyof T & string
+  // Jika diisi, tabel menjadi bisa dipilih: baris bisa diklik dan baris terpilih disorot.
+  selectedKey?: string
+}>()
+
+const emit = defineEmits<{
+  (e: 'row-click', row: T): void
 }>()
 </script>
 
@@ -24,7 +30,16 @@ defineProps<{
         </tr>
       </thead>
       <tbody>
-        <tr v-for="row in rows" :key="String(row[rowKey])" class="border-b border-gray-800/60">
+        <tr
+          v-for="row in rows"
+          :key="String(row[rowKey])"
+          class="border-b border-gray-800/60"
+          :class="[
+            selectedKey !== undefined ? 'cursor-pointer hover:bg-gray-800/50' : '',
+            selectedKey !== undefined && String(row[rowKey]) === selectedKey ? 'bg-gray-800' : '',
+          ]"
+          @click="emit('row-click', row)"
+        >
           <td
             v-for="col in columns"
             :key="col.key"
