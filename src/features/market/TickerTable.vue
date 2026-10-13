@@ -14,7 +14,7 @@ const columns: Column[] = [
   { key: 'symbol', label: 'Pair' },
   { key: 'price', label: 'Harga', align: 'right' },
   { key: 'change24h', label: 'Perubahan 24 jam', align: 'right' },
-  { key: 'volume24h', label: 'Volume 24 jam', align: 'right' },
+  { key: 'volume24h', label: 'Volume 24 jam (USDT)', align: 'right' },
 ]
 
 function formatPrice(value: number): string {
@@ -31,7 +31,9 @@ onMounted(() => store.fetchTickers())
     <BaseTable v-else :columns="columns" :rows="tickers" row-key="symbol">
       <template #cell-price="{ value }">{{ formatPrice(Number(value)) }}</template>
       <template #cell-change24h="{ value }"><PriceBadge :value="Number(value)" /></template>
-      <template #cell-volume24h="{ value }">{{ Number(value).toLocaleString('en-US') }}</template>
+      <template #cell-volume24h="{ value }">
+        {{ Number(value).toLocaleString('en-US', { maximumFractionDigits: 0 }) }}
+      </template>
     </BaseTable>
   </BaseCard>
 </template>
