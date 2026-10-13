@@ -1,9 +1,5 @@
-<script setup lang="ts" generic="T extends Record<string, unknown>">
-export interface Column {
-  key: string
-  label: string
-  align?: 'left' | 'right'
-}
+<script setup lang="ts" generic="T extends object">
+import type { Column } from '@/types/table'
 
 defineProps<{
   columns: Column[]
@@ -35,8 +31,8 @@ defineProps<{
             class="px-3 py-2"
             :class="col.align === 'right' ? 'text-right' : 'text-left'"
           >
-            <slot :name="`cell-${col.key}`" :row="row" :value="row[col.key]">
-              {{ row[col.key] }}
+            <slot :name="`cell-${col.key}`" :row="row" :value="row[col.key as keyof T]">
+              {{ row[col.key as keyof T] }}
             </slot>
           </td>
         </tr>
