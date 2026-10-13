@@ -1,3 +1,3 @@
 <template>
-  <h2 class="text-xl font-semibold">Portofoliio</h2>
+  <h2 class="text-xl font-semibold">Portofolio</h2>
 </template>
