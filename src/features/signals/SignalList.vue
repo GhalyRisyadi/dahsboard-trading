@@ -28,16 +28,19 @@ onMounted(() => store.fetchSignals())
 </script>
 
 <template>
-  <BaseCard title="Sinyal AI">
+  <BaseCard title="Sinyal">
     <p class="mb-3 rounded bg-yellow-500/10 px-3 py-2 text-xs text-yellow-400">
-      Data contoh. Belum terhubung ke model AI, jangan dipakai untuk keputusan trading.
+      Sinyal dihitung dari persilangan EMA 12 dan EMA 26, bukan prediksi model AI dan bukan saran
+      trading.
     </p>
     <p v-if="loading" class="text-sm text-gray-400">Memuat sinyal...</p>
     <p v-else-if="error" class="text-sm text-red-400">{{ error }}</p>
     <BaseTable v-else :columns="columns" :rows="signals" row-key="id">
       <template #cell-createdAt="{ value }">{{ formatTime(Number(value)) }}</template>
       <template #cell-side="{ value }"><SideBadge :side="value as SignalSide" /></template>
-      <template #cell-confidence="{ value }">{{ Number(value) }}%</template>
+      <template #cell-confidence="{ value }">
+        {{ value === null ? '-' : `${Number(value)}%` }}
+      </template>
     </BaseTable>
   </BaseCard>
 </template>
